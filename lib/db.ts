@@ -175,5 +175,3 @@ export function importData(jsonData: string): void {
     throw new Error("فشل في استيراد البيانات")
   }
 }
-
-// تم إزالة دالة إضافة البيانات التجريبية
