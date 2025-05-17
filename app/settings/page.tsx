@@ -28,6 +28,22 @@ import { useTheme } from "next-themes"
 import { AdjustmentCalculator } from "@/components/adjustment-calculator"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
+// تعديل الكود للتحقق من وجود localStorage قبل استخدامه
+
+// في بداية الملف، أضف هذه الدالة المساعدة للتحقق من وجود localStorage
+const getLocalStorageItem = (key: string, defaultValue: string): string => {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem(key) || defaultValue
+  }
+  return defaultValue
+}
+
+const setLocalStorageItem = (key: string, value: string): void => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem(key, value)
+  }
+}
+
 export default function SettingsPage() {
   const router = useRouter()
   const { toast } = useToast()
@@ -279,9 +295,9 @@ export default function SettingsPage() {
                 <div className="space-y-2">
                   <h3 className="text-lg font-medium">حجم البطاقات</h3>
                   <RadioGroup
-                    defaultValue={localStorage.getItem("cardSize") || "medium"}
+                    defaultValue={getLocalStorageItem("cardSize", "medium")}
                     onValueChange={(value) => {
-                      localStorage.setItem("cardSize", value)
+                      setLocalStorageItem("cardSize", value)
                       toast({
                         title: "تم الحفظ",
                         description: "تم حفظ إعدادات حجم البطاقات",
@@ -325,9 +341,9 @@ export default function SettingsPage() {
                   <div className="grid gap-2">
                     <Label htmlFor="items-per-page">عدد العناصر</Label>
                     <Select
-                      defaultValue={localStorage.getItem("itemsPerPage") || "9"}
+                      defaultValue={getLocalStorageItem("itemsPerPage", "9")}
                       onValueChange={(value) => {
-                        localStorage.setItem("itemsPerPage", value)
+                        setLocalStorageItem("itemsPerPage", value)
                         toast({
                           title: "تم الحفظ",
                           description: "تم حفظ إعدادات عدد العناصر في الصفحة",
@@ -382,9 +398,9 @@ export default function SettingsPage() {
                 <div className="space-y-2">
                   <h3 className="text-lg font-medium">ترتيب العناصر</h3>
                   <Select
-                    defaultValue={localStorage.getItem("itemsSort") || "name"}
+                    defaultValue={getLocalStorageItem("itemsSort", "name")}
                     onValueChange={(value) => {
-                      localStorage.setItem("itemsSort", value)
+                      setLocalStorageItem("itemsSort", value)
                       toast({
                         title: "تم الحفظ",
                         description: "تم حفظ إعدادات ترتيب العناصر",
