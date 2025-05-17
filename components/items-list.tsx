@@ -57,8 +57,18 @@ import { useToast } from "@/hooks/use-toast"
 import { Progress } from "@/components/ui/progress"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
-// تعديل ثابت ITEMS_PER_PAGE ليستخدم القيمة المخزنة في localStorage
-const ITEMS_PER_PAGE = typeof window !== "undefined" ? Number(localStorage.getItem("itemsPerPage") || "9") : 9
+// تعديل الكود للتحقق من وجود localStorage قبل استخدامه
+
+// في بداية الملف، أضف هذه الدالة المساعدة للتحقق من وجود localStorage
+const getLocalStorageItem = (key: string, defaultValue: string): string => {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem(key) || defaultValue
+  }
+  return defaultValue
+}
+
+// تعديل ثابت ITEMS_PER_PAGE ليستخدم الدالة المساعدة
+const ITEMS_PER_PAGE = typeof window !== "undefined" ? Number(getLocalStorageItem("itemsPerPage", "9")) : 9
 
 // دالة لتنسيق الأرقام بشكل احترافي
 const formatNumber = (number: number): string => {
@@ -349,9 +359,9 @@ export function ItemsList() {
                 <Card
                   key={item.id}
                   className={`dashboard-card cursor-pointer relative ${statusBorderClass} border overflow-hidden ${
-                    typeof window !== "undefined" && localStorage.getItem("cardSize") === "small"
+                    typeof window !== "undefined" && getLocalStorageItem("cardSize", "medium") === "small"
                       ? "max-w-xs"
-                      : typeof window !== "undefined" && localStorage.getItem("cardSize") === "large"
+                      : typeof window !== "undefined" && getLocalStorageItem("cardSize", "medium") === "large"
                         ? "max-w-md"
                         : ""
                   }`}
